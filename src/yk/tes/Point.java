@@ -33,7 +33,6 @@ public class Point {
     @Override
     public boolean equals(Object obj) {
         Point p = (Point)obj;
-
         return (x == p.x) && (y == p.y);
     }
 }
