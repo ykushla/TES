@@ -20,8 +20,8 @@ public class Scheme {
     private List<Segment> segmentList = new ArrayList<>();
     private List<Segment> initialSegmentList = new ArrayList<>();
     private List<Segment> terminalSegmentList = new ArrayList<>();
-    private Map<String, List<Segment>> segmentListByStartPoint = new HashMap<>();
-    private Map<String, List<Segment>> segmentListByEndPoint = new HashMap<>();
+    private Map<Point, List<Segment>> segmentListByStartPoint = new HashMap<>();
+    private Map<Point, List<Segment>> segmentListByEndPoint = new HashMap<>();
     private Set<String> directions = new HashSet<>();
 
     public Scheme(Frame frame) {
@@ -42,23 +42,23 @@ public class Scheme {
             Segment segment = new Segment(name, startPoint, endPoint, direction);
             segmentList.add(segment);
 
-            List<Segment> localSegmentList = segmentListByStartPoint.get(startPoint.getHash());
+            List<Segment> localSegmentList = segmentListByStartPoint.get(startPoint);
             if (localSegmentList == null) {
                 localSegmentList = new ArrayList<>();
-                segmentListByStartPoint.put(startPoint.getHash(), localSegmentList);
+                segmentListByStartPoint.put(startPoint, localSegmentList);
             }
             localSegmentList.add(segment);
 
-            localSegmentList = segmentListByEndPoint.get(endPoint.getHash());
+            localSegmentList = segmentListByEndPoint.get(endPoint);
             if (localSegmentList == null) {
                 localSegmentList = new ArrayList<>();
-                segmentListByEndPoint.put(endPoint.getHash(), localSegmentList);
+                segmentListByEndPoint.put(endPoint, localSegmentList);
             }
             localSegmentList.add(segment);
         }
 
         for (Segment segment : segmentList) {
-            List<Segment> localSegmentList = segmentListByStartPoint.get(segment.getEndPoint().getHash());
+            List<Segment> localSegmentList = segmentListByStartPoint.get(segment.getEndPoint());
             if (localSegmentList == null) {
                 segment.setTerminal();
                 terminalSegmentList.add(segment);
@@ -70,7 +70,7 @@ public class Scheme {
                 }
             }
 
-            localSegmentList = segmentListByEndPoint.get(segment.getStartPoint().getHash());
+            localSegmentList = segmentListByEndPoint.get(segment.getStartPoint());
             if (localSegmentList == null) {
                 segment.setInitial();
                 initialSegmentList.add(segment);

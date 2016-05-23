@@ -25,7 +25,15 @@ public class Point {
         return y;
     }
 
-    String getHash() {
-        return Float.toString(x) + " " + Float.toString(y);
+    @Override
+    public int hashCode() {
+        return (Float.toString(x) + " " + Float.toString(y)).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point p = (Point)obj;
+
+        return (x == p.x) && (y == p.y);
     }
 }
