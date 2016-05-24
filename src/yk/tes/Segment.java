@@ -79,4 +79,13 @@ public class Segment {
     public float getVelocity() {
         return velocity;
     }
+
+    @Override
+    public String toString() {
+        return String.format("name: %s; points: (%s, %s, %s, %s); dirr: %s",
+                (name == null) ? "" : name,
+                Float.toString(startPoint.getX()), Float.toString(startPoint.getY()),
+                Float.toString(endPoint.getX()), Float.toString(endPoint.getY()),
+                (direction == null) ? "" : direction);
+    }
 }

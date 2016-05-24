@@ -3,13 +3,14 @@ package yk.tes;
 import yk.data.Frame;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by ykushla on 24.05.2016.
  */
-public class EntryParams {
+public class EntryParams implements Iterable<EntryParam> {
 
     private static final String ENTRANCE = "Entrance";
     private static final String DIRECTION = "Direction";
@@ -50,5 +51,9 @@ public class EntryParams {
                         param.getDirection()));
             }
         }
+    }
+
+    public Iterator<EntryParam> iterator() {
+        return entryParamList.iterator();
     }
 }
