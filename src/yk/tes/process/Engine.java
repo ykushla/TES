@@ -20,7 +20,6 @@ public class Engine implements Runnable, Loggable {
 
     private long timeout;
     private Scheme scheme;
-//    private EntryParams params;
 
     private TrafficGenerator generator;
 
@@ -28,7 +27,6 @@ public class Engine implements Runnable, Loggable {
 
     public Engine(Scheme scheme, EntryParams params, long timeout) {
         this.scheme = scheme;
-//        this.params = params;
         this.timeout = timeout;
 
         generator = new TrafficGenerator(scheme, params, timeout);
@@ -36,7 +34,6 @@ public class Engine implements Runnable, Loggable {
 
     private void moveCars() throws Exception {
         for (int i = 0; i < carList.size(); i++) {
-//        for (Car car : carList) {
             if (! carList.get(i).move(timeout)) {
                 carList.remove(i--);
             }
@@ -44,13 +41,23 @@ public class Engine implements Runnable, Loggable {
     }
 
     private void generateNewCars() {
-        // TEMP IMPLEMENTATION
-
-        if (carList.size() > 0) return;
-
         List<Car> newCarList = generator.generate();
         if ((newCarList != null) && (newCarList.size() > 0)) {
-            carList.add(newCarList.get(0));
+            carList.addAll(newCarList);
+        }
+    }
+
+    private void logCars() {
+        if (carList.size() > 0) {
+            for (Car car : carList) {
+                log(String.format("dirr: %s, segm: %s, pos: %s",
+                        car.getDirection(),
+                        car.getCurrentSegment(),
+                        car.getPositionInSegment()));
+            }
+        }
+        else {
+            log("");
         }
     }
 
@@ -58,20 +65,11 @@ public class Engine implements Runnable, Loggable {
         try {
             while (true) {
                 moveCars();
+                logCars();
                 generateNewCars();
 
                 // freeze thread for the defined milliseconds time
                 Thread.sleep(timeout);
-
-                if (carList.size() > 0) {
-                    log(String.format("dirr: %s, segm: %s, pos: %s",
-                            carList.get(0).getDirection(),
-                            carList.get(0).getCurrentSegment(),
-                            carList.get(0).getPositionInSegment()));
-                }
-                else {
-                    log("");
-                }
             }
         }
         catch (Exception e) {

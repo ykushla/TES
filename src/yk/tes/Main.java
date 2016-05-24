@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Main {
 
-    private static final long TIMEOUT = 1000;
+    private static final long TIMEOUT = 100;
 
     public static void main(String[] args) {
         try {
