@@ -20,7 +20,7 @@ public class Scheme {
     private static final String VELOCITY = "Velocity";
 
     private List<Segment> segmentList = new ArrayList<>();
-    private List<Segment> initialSegmentList = new ArrayList<>();
+    private Map<String, Segment> initialSegments = new HashMap<>();
     private List<Segment> terminalSegmentList = new ArrayList<>();
     private Map<Point, List<Segment>> segmentListByStartPoint = new HashMap<>();
     private Map<Point, List<Segment>> segmentListByEndPoint = new HashMap<>();
@@ -97,17 +97,13 @@ public class Scheme {
 
             localSegmentList = segmentListByEndPoint.get(segment.getStartPoint());
             if (localSegmentList == null) {
+                if (segment.getName() == null) {
+                    throw new Exception(String.format("Initial segment (points: %f, %f, %f, %f) must have a name definition!",
+                            segment.getStartPoint().getX(), segment.getStartPoint().getY(),
+                            segment.getEndPoint().getX(), segment.getEndPoint().getY()));
+                }
                 segment.setInitial();
-                initialSegmentList.add(segment);
-            }
-        }
-
-        // validates initial segments on names definition
-        for (Segment segment : initialSegmentList) {
-            if (segment.getName() == null) {
-                throw new Exception(String.format("Initial segment (points: %f, %f, %f, %f) must have a name definition!",
-                        segment.getStartPoint().getX(), segment.getStartPoint().getY(),
-                        segment.getEndPoint().getX(), segment.getEndPoint().getY()));
+                initialSegments.put(segment.getName(), segment);
             }
         }
     }
@@ -116,8 +112,8 @@ public class Scheme {
         return segmentList;
     }
 
-    public List<Segment> getInitialSegmentList() {
-        return initialSegmentList;
+    public Map<String, Segment> getInitialSegments() {
+        return initialSegments;
     }
 
     public List<Segment> getTerminalSegmentList() {
