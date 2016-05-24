@@ -26,17 +26,17 @@ public class Frame {
 
     public void printToConsole() {
         for (String name : names) {
-            System.out.print(name + " ");
+            System.out.print(name + "\t");
         }
         System.out.println();
 
         for (Map<String, String> item : items) {
-            for (int i = 0; i < names.size(); i++) {
-                String value = item.get(names.get(i));
+            for (String name : names) {
+                String value = item.get(name);
                 if (value.isEmpty()) {
                     value = "-";
                 }
-                System.out.print(value + " ");
+                System.out.print(value + "\t");
             }
             System.out.println();
         }

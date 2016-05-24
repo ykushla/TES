@@ -2,6 +2,7 @@ package yk.data;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.util.*;
@@ -58,6 +59,7 @@ public class ExcelReader {
         return frameList;
     }
 
+    @Nullable
     public static Frame readFromFile(String fileName, String sheetName)
             throws IOException, InvalidFormatException {
 

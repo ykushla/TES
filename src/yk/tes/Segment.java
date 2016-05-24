@@ -12,18 +12,23 @@ public class Segment {
     private Point startPoint;
     private Point endPoint;
     private String direction;
+    private float velocity;
+
     private double length;
+
     private boolean isTerminal = false;
     private boolean isInitial = false;
 
     private List<Segment> prevSegmentList = new ArrayList<>();
     private List<Segment> nextSegmentList = new ArrayList<>();
 
-    public Segment(String name, Point startPoint, Point endPoint, String direction) {
+    public Segment(String name, Point startPoint, Point endPoint, String direction, float velocity) {
         this.name = name;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.direction = direction;
+        this.velocity = velocity;
+
         length = Point.getDistanceBetweenPoints(startPoint, endPoint);
     }
 
@@ -69,5 +74,9 @@ public class Segment {
 
     public boolean isInitial() {
         return isInitial;
+    }
+
+    public float getVelocity() {
+        return velocity;
     }
 }
