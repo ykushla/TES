@@ -1,4 +1,4 @@
-package yk.tes;
+package yk.tes.objects;
 
 /**
  * Created by ykushla on 23.05.2016.

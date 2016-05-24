@@ -1,4 +1,4 @@
-package yk.tes;
+package yk.tes.objects;
 
 import yk.data.Frame;
 
