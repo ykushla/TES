@@ -121,4 +121,29 @@ public class Scheme {
     public Set<String> getDirections() {
         return directions;
     }
+
+    public List<Point> getBoundaryPoints() {
+//        if (segmentList.size() == 0) return null;
+
+        float minX = 0, maxX = 0, minY = 0, maxY = 0;
+
+        for (Segment segment : segmentList) {
+            minX = Math.min(minX, segment.getStartPoint().getX());
+            minX = Math.min(minX, segment.getEndPoint().getX());
+            minY = Math.min(minY, segment.getStartPoint().getY());
+            minY = Math.min(minY, segment.getEndPoint().getY());
+
+            maxX = Math.max(maxX, segment.getStartPoint().getX());
+            maxX = Math.max(maxX, segment.getEndPoint().getX());
+            maxY = Math.max(maxY, segment.getStartPoint().getY());
+            maxY = Math.max(maxY, segment.getEndPoint().getY());
+        }
+
+        List<Point> result = new ArrayList<>(4);
+        result.add(new Point(minX, minY));
+        result.add(new Point(maxX, minY));
+        result.add(new Point(minX, maxY));
+        result.add(new Point(maxX, maxY));
+        return result;
+    }
 }

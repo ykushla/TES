@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import yk.tes.objects.Car;
+import yk.tes.objects.Point;
 import yk.tes.objects.Scheme;
 import yk.tes.objects.Segment;
 import yk.tes.process.Engine;
@@ -23,32 +24,51 @@ import java.util.TimerTask;
  */
 public class SchemeRenderer implements IEngineCycleHandler {
 
-//    private Pane root;
     private GraphicsContext gc1;
     private GraphicsContext gc2;
 
-//    private WritableImage image;
-
-    private int width;
-    private int height;
-    private int zeroX;
-    private int zeroY;
-    private float scaleInReal;
-    private int scaleOnCanvas;
+    private double width;
+    private double height;
+    private double zeroX;
+    private double zeroY;
+    private double scaleInReal;
+    private double scaleOnCanvas;
 
     private boolean firstTime = true;
 
-    public SchemeRenderer(GraphicsContext gc1, GraphicsContext gc2,
-                          int width, int height, int zeroX, int zeroY, float scaleInReal, int scaleOnCanvas) {
-//        this.root = root;
+    public SchemeRenderer(GraphicsContext gc1, GraphicsContext gc2, Scheme scheme) {
         this.gc1 = gc1;
         this.gc2 = gc2;
-        this.width = width;
-        this.height = height;
-        this.zeroX = zeroX;
-        this.zeroY = zeroY;
-        this.scaleInReal = scaleInReal;
-        this.scaleOnCanvas = scaleOnCanvas;
+        width = Math.max(gc1.getCanvas().getWidth(), gc2.getCanvas().getWidth());
+        height = Math.max(gc1.getCanvas().getHeight(), gc2.getCanvas().getHeight());
+
+        List<Point> boundaryPoints = scheme.getBoundaryPoints();
+        float minX = Math.min(Math.min(boundaryPoints.get(0).getX(), boundaryPoints.get(1).getX()),
+            Math.min(boundaryPoints.get(2).getX(), boundaryPoints.get(3).getX()));
+        float minY = Math.min(Math.min(boundaryPoints.get(0).getY(), boundaryPoints.get(1).getY()),
+                Math.min(boundaryPoints.get(2).getY(), boundaryPoints.get(3).getY()));
+        float maxX = Math.max(Math.max(boundaryPoints.get(0).getX(), boundaryPoints.get(1).getX()),
+                Math.max(boundaryPoints.get(2).getX(), boundaryPoints.get(3).getX()));
+        float maxY = Math.max(Math.max(boundaryPoints.get(0).getY(), boundaryPoints.get(1).getY()),
+                Math.max(boundaryPoints.get(2).getY(), boundaryPoints.get(3).getY()));
+        float schemeWidth = maxX - minX;
+        float schemeHeight = maxY - minY;
+
+        double scaleHor = schemeWidth / width;
+        double scaleVer = schemeHeight / height;
+
+        if (scaleHor > scaleVer) {
+            scaleInReal = maxX - minX;
+            scaleOnCanvas = width - 80;
+        }
+        else {
+            scaleInReal = maxY - minY;
+            scaleOnCanvas = height - 80;
+        }
+
+        zeroX = 40 - minX / scaleInReal * scaleOnCanvas;
+        zeroY = 40 + maxY / scaleInReal * scaleOnCanvas;
+
     }
 
     private long convertX(double x) {
@@ -80,7 +100,7 @@ public class SchemeRenderer implements IEngineCycleHandler {
     }
 
     private void drawCars(List<Car> carList) {
-        gc2.clearRect(0, 0, width, height);
+        gc2.clearRect(0, 0, width - 1, height - 1);
         if (carList.size() > 0) {
             gc2.setFill(new Color(1, 0, 0, 1));
             for (Car car : carList) {

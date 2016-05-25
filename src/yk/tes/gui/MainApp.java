@@ -3,7 +3,6 @@ package yk.tes.gui;/**
  */
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -49,9 +48,9 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        SchemeRenderer sr = new SchemeRenderer(gc1, gc2, WIN_WIDTH, WIN_HEIGHT, WIN_WIDTH / 2, 500, 700, 450);
-
         initObjects();
+
+        SchemeRenderer sr = new SchemeRenderer(gc1, gc2, scheme);
 
         Engine engine = createEngine();
         engine.registerHandler(sr);
