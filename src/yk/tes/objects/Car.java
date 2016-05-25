@@ -70,4 +70,16 @@ public class Car {
     public double getPositionInSegment() {
         return positionInSegment;
     }
+
+    public double getX() {
+        return currentSegment.getStartPoint().getX() +
+                (currentSegment.getEndPoint().getX() - currentSegment.getStartPoint().getX()) *
+                        positionInSegment / currentSegment.getLength();
+    }
+
+    public double getY() {
+        return currentSegment.getStartPoint().getY() +
+                (currentSegment.getEndPoint().getY() - currentSegment.getStartPoint().getY()) *
+                        positionInSegment / currentSegment.getLength();
+    }
 }

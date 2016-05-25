@@ -5,29 +5,25 @@ import yk.tes.objects.EntryParams;
 import yk.tes.objects.Scheme;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by ykushla on 24.05.2016.
  */
-interface Loggable {
-    void log(String msg);
-}
-
-public class Engine implements Runnable, Loggable {
+public class Engine implements Runnable {
 
     private long timeout;
     private Scheme scheme;
-
     private TrafficGenerator generator;
-
     private List<Car> carList = new LinkedList<>();
+
+    private List<IEngineCycleHandler> handlerList = new ArrayList<>();
 
     public Engine(Scheme scheme, EntryParams params, long timeout) {
         this.scheme = scheme;
         this.timeout = timeout;
-
         generator = new TrafficGenerator(scheme, params, timeout);
     }
 
@@ -67,6 +63,8 @@ public class Engine implements Runnable, Loggable {
                 logCars();
                 generateNewCars();
 
+                callHandlers();
+
                 // freeze thread for the defined milliseconds time
                 Thread.sleep(timeout);
             }
@@ -78,5 +76,23 @@ public class Engine implements Runnable, Loggable {
 
     public void log(String msg) {
         System.out.println(String.format("%tT: %s", LocalTime.now(), msg));
+    }
+
+    public Scheme getScheme() {
+        return scheme;
+    }
+
+    public List<Car> getCarList() {
+        return carList;
+    }
+
+    public void registerHandler(IEngineCycleHandler handler) {
+        handlerList.add(handler);
+    }
+
+    private void callHandlers() {
+        for (IEngineCycleHandler handler : handlerList) {
+            handler.engineCycleCall(this);
+        }
     }
 }
